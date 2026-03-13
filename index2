@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=0.6, minimum-scale=0.6, maximum-scale=0.6, user-scalable=no">
 <title>Penghitung Belanja</title>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 
 <!-- ICON -->
 <link rel="icon" href="logo.png">
@@ -13,6 +13,9 @@
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#121212">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 
 <style>
 * {
@@ -287,9 +290,7 @@ document.addEventListener('input', function(e) {
 </script>
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js")
-  .then(() => console.log("Service Worker aktif"))
-  .catch(err => console.log("SW gagal:", err));
+  navigator.serviceWorker.register("sw.js");
 }
 </script>
 

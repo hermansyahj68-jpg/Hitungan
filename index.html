@@ -313,6 +313,216 @@ if("serviceWorker" in navigator){
 navigator.serviceWorker.register("service-worker.js")
 
 }
+  <!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Penghitung Belanja</title>
+
+ 
+  
+<!-- ICON -->
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#121212">
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2, h3 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    h2 {
+      margin-right: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border: 5px solid #777;
+    }
+
+    th, td {
+      border: 5px solid #777;
+      padding: 16px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #areaBelanja {
+      background: #FFDFFD7A;
+      padding: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+    }
+
+    td button {
+      background-color: #ff4d4d;
+      color: black;
+      font-size: 18px;
+      padding: 10px 20px;
+    }
+
+    td button:hover {
+      opacity: 0.9;
+    }
+
+    #filename {
+      padding: 8px;
+      font-size: 16px;
+      width: 300px;
+      margin-top: 10px;
+    }
+
+    .actions {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="areaBelanja">
+  <h2>🛒 Penghitung </h2>
+  <h3>Total Harga : Rp: <span id="total">0</span></h3>
+
+  <table id="tabelBelanja">
+    <thead>
+      <tr>
+        <th>Nama Barang</th>
+        <th>Jumlah</th>
+        <th>Harga Satuan</th>
+        <th>Total</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" class="nama-barang" placeholder="Nama"></td>
+        <td><input type="text" class="jumlah" value="" oninput="formatAngka(this); hitungTotal()"></td>
+        <td><input type="text" class="harga" value="" oninput="formatAngka(this); hitungTotal()"></td>
+        <td class="subtotal">0</td>
+        <td><button onclick="hapusBaris(this)">Hapus</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="actions">
+  <label for="filename">📝 Nama file gambar:</label>
+  <input type="text" id="filename" placeholder="Contoh: struk-belanja-ibu" value="belanja">
+  <br><br>
+  <button onclick="tambahBaris()">+ Tambah Barang</button>
+  <button onclick="simpanSebagaiGambar()">📷 Simpan Gambar</button>
+</div>
+
+<script>
+  function formatAngka(input) {
+    let angka = input.value.replace(/\D/g, "");
+    if (angka === "") angka = "0";
+    input.value = parseInt(angka).toLocaleString("id-ID");
+  }
+
+  function parseAngka(str) {
+    return parseInt(str.replace(/\./g, "")) || 0;
+  }
+
+  function hitungTotal() {
+    const rows = document.querySelectorAll("#tabelBelanja tbody tr");
+    let total = 0;
+    rows.forEach(row => {
+      const jumlah = parseAngka(row.querySelector(".jumlah").value);
+      const harga = parseAngka(row.querySelector(".harga").value);
+      const subtotal = jumlah * harga;
+      row.querySelector(".subtotal").textContent = subtotal.toLocaleString('id-ID');
+      total += subtotal;
+    });
+    document.getElementById("total").textContent = total.toLocaleString('id-ID');
+  }
+
+  function tambahBaris() {
+    const tbody = document.querySelector("#tabelBelanja tbody");
+    const barisBaru = document.createElement("tr");
+    barisBaru.innerHTML = `
+      <td><input type="text" class="nama-barang" placeholder="Nama"></td>
+      <td><input type="text" class="jumlah" value="0" oninput="formatAngka(this); hitungTotal()"></td>
+      <td><input type="text" class="harga" value="0" oninput="formatAngka(this); hitungTotal()"></td>
+      <td class="subtotal">0</td>
+      <td><button onclick="hapusBaris(this)">Hapus</button></td>
+    `;
+    tbody.appendChild(barisBaru);
+  }
+
+  function hapusBaris(button) {
+    button.parentNode.parentNode.remove();
+    hitungTotal();
+  }
+
+  function simpanSebagaiGambar() {
+    const namaFile = document.getElementById("filename").value.trim() || "belanja";
+    const area = document.getElementById("areaBelanja");
+
+    html2canvas(area).then(canvas => {
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = namaFile + ".png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("✅ Gambar berhasil disimpan dengan nama: " + namaFile + ".png\nCek folder Unduhan (Download).");
+      });
+    });
+  }
+
+  hitungTotal(); // inisialisasi saat awal
+
+
+// SERVICE WORKER
+
+
+if("serviceWorker" in navigator){
+
+navigator.serviceWorker.register("service-worker.js")
+
+}
+</script>
+</body>
+</html>
 
 </script>
 

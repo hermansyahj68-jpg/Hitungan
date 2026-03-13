@@ -1,6 +1,6 @@
 {
-"name": "Image to PBR Texture Tool",
-"short_name": "ImageToPBR",
+"name": "penghitung",
+"short_name": "kakulator",
 "start_url": "./index.html",
 "display": "standalone",
 "background_color": "#121212",

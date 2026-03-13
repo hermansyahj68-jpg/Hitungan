@@ -133,7 +133,7 @@
 
 <div class="actions">
   <label for="filename">📝 Nama file gambar:</label>
-  <input type="text" id="filename" placeholder="Contoh: struk-belanja-ibu" value="belanja">
+  <input type="text" id="filename" placeholder="Contoh: struk-belanja-ibu" value="Catatan">
   <br><br>
   <button onclick="tambahBaris()">+ Tambah Barang</button>
   <button onclick="simpanSebagaiGambar()">📷 Simpan Gambar</button>
@@ -182,7 +182,7 @@
   }
 
   function simpanSebagaiGambar() {
-    const namaFile = document.getElementById("filename").value.trim() || "belanja";
+    const namaFile = document.getElementById("filename").value.trim() || "Catatan";
     const area = document.getElementById("areaBelanja");
 
     html2canvas(area).then(canvas => {

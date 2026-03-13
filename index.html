@@ -168,8 +168,8 @@
     const barisBaru = document.createElement("tr");
     barisBaru.innerHTML = `
       <td><input type="text" class="nama-barang" placeholder="Nama"></td>
-      <td><input type="text" class="jumlah" value="0" oninput="formatAngka(this); hitungTotal()"></td>
-      <td><input type="text" class="harga" value="0" oninput="formatAngka(this); hitungTotal()"></td>
+      <td><input type="text" class="jumlah" value="" oninput="formatAngka(this); hitungTotal()"></td>
+      <td><input type="text" class="harga" value="" oninput="formatAngka(this); hitungTotal()"></td>
       <td class="subtotal">0</td>
       <td><button onclick="hapusBaris(this)">Hapus</button></td>
     `;
